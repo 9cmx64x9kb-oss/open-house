@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Open House — Sign In</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Raleway:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #f5f2ec;
+      --cream-dark: #ede9e0;
+      --ink: #1a1a18;
+      --ink-light: #3a3a36;
+      --gold: #b49a6a;
+      --gold-light: #d4b98a;
+      --rule: #c8bfac;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'Raleway', sans-serif;
+      font-weight: 300;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    /* ── Page wrapper ── */
+    .page {
+      width: 100%;
+      max-width: 620px;
+    }
+
+    /* ── Header ── */
+    .header {
+      text-align: center;
+      margin-bottom: 44px;
+    }
+
+    .header-rule {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 26px;
+    }
+
+    .header-rule::before,
+    .header-rule::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+    }
+
+    .diamond {
+      width: 8px;
+      height: 8px;
+      background: var(--gold);
+      transform: rotate(45deg);
+      flex-shrink: 0;
+    }
+
+    .label {
+      font-family: 'Raleway', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(32px, 6vw, 48px);
+      letter-spacing: 0.04em;
+      line-height: 1.1;
+      color: var(--ink);
+    }
+
+    h1 em {
+      font-style: italic;
+      font-weight: 300;
+      color: var(--ink-light);
+    }
+
+    .address-block {
+      margin-top: 18px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+    }
+
+    .address-input-wrap {
+      display: flex;
+      justify-content: center;
+      margin-top: 6px;
+    }
+
+    .address-display {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 300;
+      letter-spacing: 0.06em;
+      color: var(--ink);
+      border: none;
+      border-bottom: 1px solid var(--rule);
+      background: transparent;
+      text-align: center;
+      width: 100%;
+      max-width: 420px;
+      padding: 4px 0 8px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .address-display:focus {
+      border-bottom-color: var(--gold);
+    }
+
+    .address-display::placeholder {
+      color: var(--rule);
+      font-style: italic;
+    }
+
+    /* ── Guest log ── */
+    .guest-log {
+      background: #ffffff;
+      border: 1px solid var(--rule);
+      border-top: 3px solid var(--ink);
+      padding: 0;
+      overflow: hidden;
+    }
+
+    /* ── Log header row ── */
+    .log-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 36px;
+      background: var(--ink);
+      color: var(--cream);
+      padding: 12px 24px;
+      gap: 12px;
+    }
+
+    .col-label {
+      font-family: 'Raleway', sans-serif;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      opacity: 0.75;
+    }
+
+    /* ── Entry rows ── */
+    .entries {
+      list-style: none;
+    }
+
+    .entry-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 36px;
+      gap: 12px;
+      padding: 0 24px;
+      border-bottom: 1px solid var(--cream-dark);
+      transition: background 0.15s;
+    }
+
+    .entry-row:last-child { border-bottom: none; }
+    .entry-row:hover { background: #fdfcfa; }
+
+    .entry-row input {
+      width: 100%;
+      border: none;
+      background: transparent;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--ink);
+      padding: 14px 0;
+      outline: none;
+      transition: color 0.2s;
+    }
+
+    .entry-row input::placeholder {
+      color: #ccc7bc;
+      font-style: italic;
+      font-weight: 300;
+    }
+
+    .entry-row input:focus {
+      color: var(--ink);
+    }
+
+    .remove-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #ccc7bc;
+      font-size: 18px;
+      padding: 0;
+      transition: color 0.2s;
+      line-height: 1;
+    }
+
+    .remove-btn:hover { color: #a0342e; }
+
+    /* ── Add row ── */
+    .add-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 24px;
+      border-top: 1px solid var(--rule);
+      background: var(--cream);
+      cursor: pointer;
+      gap: 10px;
+      font-family: 'Raleway', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      transition: background 0.15s, color 0.15s;
+      border: none;
+      width: 100%;
+    }
+
+    .add-row:hover {
+      background: var(--cream-dark);
+      color: var(--ink);
+    }
+
+    .add-row svg { flex-shrink: 0; }
+
+    /* ── Footer ── */
+    .footer {
+      text-align: center;
+      margin-top: 32px;
+    }
+
+    .footer-rule {
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--rule), transparent);
+      margin-bottom: 16px;
+    }
+
+    .footer p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 13px;
+      font-style: italic;
+      color: #b0a898;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── Guest count ── */
+    .guest-count {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 12px;
+      font-family: 'Raleway', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    #count-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 300;
+      letter-spacing: 0;
+      line-height: 1;
+      color: var(--ink);
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <p class="label">Open House</p>
+
+    <div class="header-rule">
+      <div class="diamond"></div>
+    </div>
+
+    <h1>Welcome.<br><em>Please sign in.</em></h1>
+
+    <div class="address-block">Property Address</div>
+    <div class="address-input-wrap">
+      <input class="address-display" type="text" placeholder="123 Luxury Lane, Dallas, TX 75201" />
+    </div>
+  </div>
+
+  <!-- Guest Log -->
+  <div class="guest-log">
+    <div class="log-header">
+      <span class="col-label">Full Name</span>
+      <span class="col-label">Phone</span>
+      <span class="col-label">Email</span>
+      <span></span>
+    </div>
+    <ul class="entries" id="entries"></ul>
+    <button class="add-row" id="add-btn" onclick="addRow()">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="6" y1="0" x2="6" y2="12" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="0" y1="6" x2="12" y2="6" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
+      Add Guest
+    </button>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="footer-rule"></div>
+    <p>Thank you for visiting. We'll be in touch.</p>
+    <div class="guest-count">
+      <span id="count-num">0</span>&nbsp;guests signed in
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let rowCount = 0;
+
+  function updateCount() {
+    const filled = [...document.querySelectorAll('.entry-row')].filter(row => {
+      return [...row.querySelectorAll('input')].some(i => i.value.trim() !== '');
+    }).length;
+    document.getElementById('count-num').textContent = filled;
+  }
+
+  function addRow() {
+    rowCount++;
+    const li = document.createElement('li');
+    li.className = 'entry-row';
+    li.id = 'row-' + rowCount;
+    li.innerHTML = `
+      <input type="text"   placeholder="Full name"    autocomplete="off" oninput="updateCount()" />
+      <input type="tel"    placeholder="Phone number" autocomplete="off" oninput="updateCount()" />
+      <input type="email"  placeholder="Email address" autocomplete="off" oninput="updateCount()" />
+      <button class="remove-btn" onclick="removeRow('row-${rowCount}')" title="Remove">&#x2715;</button>
+    `;
+    document.getElementById('entries').appendChild(li);
+
+    // focus first field
+    li.querySelector('input').focus();
+    updateCount();
+  }
+
+  function removeRow(id) {
+    const el = document.getElementById(id);
+    if (el) el.remove();
+    updateCount();
+  }
+
+  // Start with 3 blank rows
+  addRow(); addRow(); addRow();
+</script>
+
+</body>
+</html>
